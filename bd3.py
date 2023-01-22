@@ -2,9 +2,11 @@ from pyspark.sql import SparkSession
 from graphframes import *
 
 # Initialize SparkSession
+
 spark = SparkSession.builder \
     .appName("GraphX OOP") \
     .getOrCreate()
+spark.sparkContext.addPyFile("path-to-graphframes-jar")
 
 # Define vertices
 vertices = spark.createDataFrame([
