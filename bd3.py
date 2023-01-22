@@ -33,3 +33,21 @@ print(myGraph.edges.collect())
 
 # 1.2.3 Use the triplets() method to combine vertices and edges based on VertexId.
 print(myGraph.triplets.collect())
+
+# 1.2.5 Determine the number of edges coming out of each vertex
+print(myGraph.aggregateMessages(lambda msg: msg.sendToSrc(1), lambda a, b: a + b).collect())
+
+# 1.2.6 For each vertex number, display its name and the number of edges coming out of it
+print(myGraph.aggregateMessages(lambda msg: msg.sendToSrc(1), lambda a, b: a + b).join(myGraph.vertices).collect())
+
+# 1.2.7 Remove the vertex number, leaving only its name and the number of edges coming out of it
+print(myGraph.aggregateMessages(lambda msg: msg.sendToSrc(1), lambda a, b: a + b).join(myGraph.vertices).map(
+    lambda x: (x[1][1], x[1][0])).collect())
+
+# 1.2.8 show all the names of the vertices (even those from which no edges coming out of it)
+print(myGraph.aggregateMessages(lambda msg: msg.sendToSrc(1), lambda a, b: a + b).rightOuterJoin(myGraph.vertices).map(
+    lambda x: (x[1][1], x[1][0])).collect())
+
+# 1.2.9 Let's clean up the previous listing by getting rid of Some and None.
+print(myGraph.aggregateMessages(lambda msg: msg.sendToSrc(1), lambda a, b: a + b).rightOuterJoin(myGraph.vertices).map(
+    lambda x: (x[1][1], x[1][0].getOrElse(0))).collect())
